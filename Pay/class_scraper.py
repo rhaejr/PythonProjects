@@ -1,108 +1,25 @@
-import sys
-import signal
+import sqlite3
 
-from selenium import webdriver
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import StaleElementReferenceException
+conn = sqlite3.connect("wages.db")
+cur = conn.cursor()
 
-def sigint(signal, frame):
-    sys.exit(0)
+cur.execute('''CREATE TABLE IF NOT EXISTS state(
+state TEXT NOT NULL
+);''')
 
-def make_waitfor_elem_updated_predicate(driver, waitfor_elem_xpath):
-    elem = driver.find_element_by_xpath(waitfor_elem_xpath)
 
-    def elem_updated(driver):
-        try:
-            elem.text
-        except StaleElementReferenceException:
-            return True
-        except:
-            pass
+cur.execute('''CREATE TABLE IF NOT EXISTS counties(
+state TEXT NOT NULL,
+county TEXT NOT NULL,
+date      TEXT     NOT NULL,
+link      TEXT  NOT NULL,
+FOREIGN KEY(state) REFERENCES state(state)
+);''')
 
-        return False
+cur.execute("select state from state")
 
-    return lambda driver: elem_updated(driver)
-
-class Scraper(object):
-    def __init__(self):
-        self.url = 'https://www.cpms.osd.mil/Subpage/AFWageSchedules/'
-        self.driver = webdriver.Chrome("C:\chromedriver_win32\chromedriver.exe")
-        self.driver.set_window_size(1120, 550)
-
-    def get_select(self, xpath):
-        select_elem = self.driver.find_element_by_xpath(xpath)
-        select = Select(select_elem)
-        return select
-
-    def select_option(self, xpath, value, waitfor_elem_xpath=None):
-        if waitfor_elem_xpath:
-            func = make_waitfor_elem_updated_predicate(
-                self.driver,
-                waitfor_elem_xpath
-            )
-
-        select = self.get_select(xpath)
-        select.select_by_value(value)
-
-        if waitfor_elem_xpath:
-            wait = WebDriverWait(self.driver, 10)
-            wait.until(func)
-
-        return self.get_select(xpath)
-
-    def make_select_option_iterator(self, xpath, waitfor_elem_xpath):
-        def next_option(xpath, waitfor_elem_xpath):
-            select = self.get_select(xpath)
-            select_option_values = [
-                '%s' % o.get_attribute('value')
-                for o
-                in select.options
-                if o.text != '-Select-'
-            ]
-
-            for v in select_option_values:
-                select = self.select_option(xpath, v, waitfor_elem_xpath)
-                yield select.first_selected_option.text
-
-        return lambda: next_option(xpath, waitfor_elem_xpath)
-
-    def load_page(self):
-        self.driver.get(self.url)
-
-        def page_loaded(driver):
-            path = '//select[@id="SelectedState"]'
-            return driver.find_element_by_xpath(path)
-
-        wait = WebDriverWait(self.driver, 10)
-        wait.until(page_loaded)
-
-    def scrape(self):
-        states = self.make_select_option_iterator(
-            '//select[@id="SelectedState"]',
-            '//select[@id="SelectedState"]'
-        )
-
-        districts = self.make_select_option_iterator(
-            '//select[@id="SelectedType"]',
-            '//select[@id="SelectedType"]'
-        )
-
-        projects = self.make_select_option_iterator(
-            '//select[@id="SelectedGSLocality"]',
-            None
-        )
-
-        self.load_page()
-
-        for state in states():
-            print( state)
-            for district in districts():
-                print( 2*' ', district)
-                for project in projects():
-                    print( 4*' ', project)
-
-if __name__ == '__main__':
-    signal.signal(signal.SIGINT, sigint)
-    scraper = Scraper()
-    scraper.scrape()
+everything = cur.fetchall()
+print("'AK'" in everything)
+for i in everything:
+    print("AK" in i)
+    print(i)

@@ -2,13 +2,32 @@ import selenium
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select, WebDriverWait
 import time
-file = open('links.txt','w')
+import sqlite3
+
+conn = sqlite3.connect("wages.db")
+cur = conn.cursor()
+
+cur.execute('''CREATE TABLE IF NOT EXISTS state(
+state TEXT PRIMARY KEY NOT NULL
+);''')
+
+
+cur.execute('''CREATE TABLE IF NOT EXISTS counties(
+state TEXT NOT NULL,
+county TEXT NOT NULL,
+date      TEXT     NOT NULL,
+link      TEXT  NOT NULL,
+FOREIGN KEY(state) REFERENCES state(state)
+);''')
+
+# file = open('links.txt','w')
 state = "SelectedState"
 type = "SelectedType"
-Stype= "R"
+Stype = "R"
 wage_area = "SelectedGSLocality"
 doc_type = "SelectedDocumentType"
 year = "SelectedScheduleYear"
+
 
 def find(value):
     element = browser.find_elements_by_partial_link_text(value)
@@ -16,23 +35,33 @@ def find(value):
         return element
     else:
         return False
+
+
 # element = WebDriverWait(driver, secs).until(find)
 
 browser = webdriver.Chrome("C:\chromedriver_win32\chromedriver.exe")
 browser.get("https://www.cpms.osd.mil/Subpage/AFWageSchedules/")
 
-state_select = browser.find_element_by_xpath("//select[@id='SelectedState']")  #get the select element
-state_options = state_select.find_elements_by_tag_name("option") #get all the options into a list
+state_select = browser.find_element_by_xpath("//select[@id='SelectedState']")  # get the select element
+state_options = state_select.find_elements_by_tag_name("option")  # get all the options into a list
 
 state_optionsList = []
 
-for state_option in state_options: #iterate over the options, place attribute value in list
+for state_option in state_options:  # iterate over the options, place attribute value in list
     state_optionsList.append(state_option.get_attribute("value"))
 
 for state_optionValue in state_optionsList:
-    if state_optionValue != '':
+    conn.commit()
+    cur.execute("select state from state")
+    skip = False
+    for i in cur.fetchall():
+        if state_optionValue in i:
+            skip = True
+
+    if state_optionValue != '' and skip == False:
+        cur.execute("INSERT INTO state VALUES('{}')".format(state_optionValue))
         print("starting loop on option %s" % state_optionValue)
-        file.write('{}\n'.format(state_optionValue))
+        # file.write('{}\n'.format(state_optionValue))
         state_select = Select(browser.find_element_by_xpath("//select[@id='SelectedState']"))
         state_select.select_by_value(state_optionValue)
 
@@ -64,7 +93,7 @@ for state_optionValue in state_optionsList:
         for county_optionValue in county_optionsList:
             if county_optionValue != '':
                 print("starting loop on option %s" % county_optionValue)
-                file.write('{}\n'.format(county_optionValue))
+                # file.write('{}\n'.format(county_optionValue))
                 county_select = Select(browser.find_element_by_xpath("//select[@id='SelectedCounty']"))
                 county_select.select_by_value(county_optionValue)
 
@@ -79,7 +108,8 @@ for state_optionValue in state_optionsList:
 
                 time.sleep(.5)
 
-                date_select = browser.find_element_by_xpath("//select[@id='SelectedScheduleYear']")  # get the select element
+                date_select = browser.find_element_by_xpath(
+                    "//select[@id='SelectedScheduleYear']")  # get the select element
                 date_options = date_select.find_elements_by_tag_name("option")  # get all the options into a list
 
                 date_optionsList = []
@@ -90,7 +120,7 @@ for state_optionValue in state_optionsList:
                 for date_optionValue in date_optionsList:
                     if date_optionValue != '':
                         print("starting loop on option %s" % date_optionValue)
-                        file.write('{}\n'.format(date_optionValue))
+                        # file.write('{}\n'.format(date_optionValue))
 
                         date_select = Select(browser.find_element_by_xpath("//select[@id='SelectedScheduleYear']"))
                         date_select.select_by_value(date_optionValue)
@@ -98,16 +128,29 @@ for state_optionValue in state_optionsList:
                         links = browser.find_elements_by_tag_name('a')
                         try:
                             for link in links:
-                                if date_optionValue in link.get_attribute('href'):
-                                    print(link.get_attribute('href'))
-                                    file.write('{}\n'.format(link.get_attribute('href')))
+                                link = link.get_attribute('href')
+                                if date_optionValue in link:
+                                    print(link)
+                                    # file.write('{}\n'.format(link.get_attribute('href')))
+                                    cur.execute(
+                                        "INSERT INTO counties VALUES ('{}','{}', '{}', '{}')".format(state_optionValue,
+                                                                                                     county_optionValue,
+                                                                                                     date_optionValue,
+                                                                                                     link))
                                     break
                         except selenium.common.exceptions.StaleElementReferenceException:
                             links = browser.find_elements_by_tag_name('a')
                             for link in links:
-                                if date_optionValue in link.get_attribute('href'):
-                                    print(link.get_attribute('href'))
-                                    file.write('{}\n'.format(link.get_attribute('href')))
+                                link = link.get_attribute('href')
+                                if date_optionValue in link:
+                                    print(link)
+                                    # file.write('{}\n'.format(link.get_attribute('href')))
+                                    cur.execute(
+                                        "INSERT INTO counties VALUES ('{}','{}', '{}', '{}')".format(state_optionValue,
+                                                                                                     county_optionValue,
+                                                                                                     date_optionValue,
+                                                                                                     link))
                                     break
 
-file.close()
+                                    # file.close()
+conn.close()
