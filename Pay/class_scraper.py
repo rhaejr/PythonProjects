@@ -1,6 +1,6 @@
 import sqlite3
 
-conn = sqlite3.connect("wages.db")
+conn = sqlite3.connect("wages - Copy.db")
 cur = conn.cursor()
 
 cur.execute('''CREATE TABLE IF NOT EXISTS state(
@@ -13,8 +13,16 @@ state TEXT NOT NULL,
 county TEXT NOT NULL,
 date      TEXT     NOT NULL,
 link      TEXT  NOT NULL,
+wg TEXT,
+wl TEXT,
+ws TEXT,
 FOREIGN KEY(state) REFERENCES state(state)
 );''')
+for i in [['wg', 'TEXT'],[
+'wl', 'TEXT'],
+'ws' 'TEXT']]
+cur.execute('alter table counties add column ? ?')
+
 
 cur.execute("select * from counties")
 

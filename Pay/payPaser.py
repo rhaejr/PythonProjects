@@ -1,13 +1,16 @@
-page = 'AF Wage Schedules96.html'
-page2 = 'AF Schedule Area 077R Northern Mississippi (RUS) Effective_ 17 April 2016.html'
+import requests
+res = requests.get('https://www.cpms.osd.mil/Content/AF%20Schedules/survey-sch/150/150R-12Mar1996.html',verify=False)
+# page = 'AF Wage Schedules96.html'
+# page2 = 'AF Schedule Area 077R Northern Mississippi (RUS) Effective_ 17 April 2016.html'
 #'AF Schedule Area 124R Memphis, Tennessee (RUS) Effective_ 17 April 2016.html'
 
-
-def table_parser(filename):
-    file = open(filename)
+print(res.text)
+def table_parser(page):
+    # file = open(filename)
+    page = page.split('\n')
     table = []
     num = 0
-    for line in file:
+    for line in page:
         if 'Grade' in line:
             num += 1
         if num > 0:
@@ -23,25 +26,14 @@ def table_parser(filename):
     WL = []
     WS = []
     for l in table:
-        # WG.append(l[0:1])
-        # WL.append(l[0:1])
-        # WS.append(l[0:1])
+    # WG.append(l[0:1])
+    # WL.append(l[0:1])
+    # WS.append(l[0:1])
         WG.append((l[1:6]))
         WL.append(l[6:11])
         WS.append(l[11:16])
 
-    file.close()
+    # file.close()
     return WG, WL, WS
 
 
-data = table_parser(page)
-data2 = table_parser(page2)
-
-for l, in data[0]:
-    print(-l)
-print('')
-for l in data[1]:
-    print(l)
-print('')
-for l in data[2]:
-    print(l)
