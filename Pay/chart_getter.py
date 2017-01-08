@@ -1,3 +1,5 @@
+import smtplib, datetime
+
 import requests, csv, sqlite3, os
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
@@ -80,4 +82,14 @@ while not_done:
         conn.close()
         not_done = False
     except:
-        pass
+        conn = sqlite3.connect("wages.db")
+        cur = conn.cursor()
+        cur.execute("select * from counties where wg not NULL")
+        everything = cur.fetchall()
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+        server.login('av8r.08@gmail.com', '1111aasfULLS$$')
+        server.sendmail('av8r.08@gmail.com', '6623466983@vtext.com', 'Code Stopped!\n{}\n{}'.format(
+            len(everything),
+            datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+        conn.close()
