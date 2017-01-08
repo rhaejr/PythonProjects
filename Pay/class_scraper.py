@@ -1,36 +1,34 @@
 import sqlite3
 
-conn = sqlite3.connect("wages - Copy.db")
+conn = sqlite3.connect("wages.db")
 cur = conn.cursor()
 
-cur.execute('''CREATE TABLE IF NOT EXISTS state(
-state TEXT NOT NULL
-);''')
+# cur.execute('''CREATE TABLE IF NOT EXISTS state(
+# state TEXT NOT NULL
+# );''')
+#
+#
+# cur.execute('''CREATE TABLE IF NOT EXISTS counties(
+# state TEXT NOT NULL,
+# county TEXT NOT NULL,
+# date      TEXT     NOT NULL,
+# link      TEXT  NOT NULL,
+# wg TEXT,
+# wl TEXT,
+# ws TEXT,
+# FOREIGN KEY(state) REFERENCES state(state)
+# );''')
+# for i in [['wg', 'TEXT'],['wl', 'TEXT'],['ws', 'TEXT']]:
+#     cur.execute('alter table counties add column {} {}'.format(i[0],i[1]))
 
 
-cur.execute('''CREATE TABLE IF NOT EXISTS counties(
-state TEXT NOT NULL,
-county TEXT NOT NULL,
-date      TEXT     NOT NULL,
-link      TEXT  NOT NULL,
-wg TEXT,
-wl TEXT,
-ws TEXT,
-FOREIGN KEY(state) REFERENCES state(state)
-);''')
-for i in [['wg', 'TEXT'],[
-'wl', 'TEXT'],
-'ws' 'TEXT']]
-cur.execute('alter table counties add column ? ?')
-
-
-cur.execute("select * from counties")
-
+cur.execute("select * from counties where wg not NULL")
 everything = cur.fetchall()
 # print("'AK'" in everything)
-for i in everything:
-    # print("AK" in i)
-    print(i)
+# for i in everything:
+#     # print("AK" in i)
+#     print(i)
+print(len(everything))
 
 print(cur.execute("SELECT count(*) FROM counties").fetchall()[0][0])
 

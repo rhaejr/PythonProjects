@@ -1,16 +1,20 @@
-import requests
-res = requests.get('https://www.cpms.osd.mil/Content/AF%20Schedules/survey-sch/150/150R-12Mar1996.html',verify=False)
+import requests, csv, os
+import sqlite3
+
+conn = sqlite3.connect("wages - Copy.db")
+cur = conn.cursor()
+
 # page = 'AF Wage Schedules96.html'
 # page2 = 'AF Schedule Area 077R Northern Mississippi (RUS) Effective_ 17 April 2016.html'
 #'AF Schedule Area 124R Memphis, Tennessee (RUS) Effective_ 17 April 2016.html'
 
-print(res.text)
+
 def table_parser(page):
-    # file = open(filename)
-    page = page.split('\n')
+    file = open(page)
+    # page = page.split('\n')
     table = []
     num = 0
-    for line in page:
+    for line in file:
         if 'Grade' in line:
             num += 1
         if num > 0:
@@ -33,7 +37,31 @@ def table_parser(page):
         WL.append(l[6:11])
         WS.append(l[11:16])
 
-    # file.close()
+    file.close()
     return WG, WL, WS
 
+cur.execute('select link from counties where county="150,150,RUS,Washakie County" and date="12Mar1996"')
+link = cur.fetchall()[0][0]
+
+res = requests.get(link,verify=False)
+html = res.text
+os.makedirs('test/test', exist_ok=True)
+file = open('test/test.html','w')
+for line in html:
+    line = line.strip('\n')
+    file.write(line)
+file.close()
+
+data = table_parser('test.html')
+
+
+with open('test_wg.csv','w', newline='') as f:
+    writer = csv.writer(f)
+    writer.writerows(data[0])
+with open('test_wl.csv','w', newline='') as f:
+    writer = csv.writer(f)
+    writer.writerows(data[1])
+with open('test_ws.csv','w', newline='') as f:
+    writer = csv.writer(f)
+    writer.writerows(data[2])
 

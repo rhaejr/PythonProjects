@@ -10,18 +10,18 @@ def loop():
     conn = sqlite3.connect("wages.db")
     cur = conn.cursor()
 
-    cur.execute('''CREATE TABLE IF NOT EXISTS state(
-    state TEXT PRIMARY KEY NOT NULL
-    );''')
-
-
-    cur.execute('''CREATE TABLE IF NOT EXISTS counties(
-    state TEXT NOT NULL,
-    county TEXT NOT NULL,
-    date      TEXT     NOT NULL,
-    link      TEXT  ,
-    FOREIGN KEY(state) REFERENCES state(state)
-    );''')
+    # cur.execute('''CREATE TABLE IF NOT EXISTS state(
+    # state TEXT PRIMARY KEY NOT NULL
+    # );''')
+    #
+    #
+    # cur.execute('''CREATE TABLE IF NOT EXISTS counties(
+    # state TEXT NOT NULL,
+    # county TEXT NOT NULL,
+    # date      TEXT     NOT NULL,
+    # link      TEXT  ,
+    # FOREIGN KEY(state) REFERENCES state(state)
+    # );''')
 
     # file = open('links.txt','w')
     state = "SelectedState"
