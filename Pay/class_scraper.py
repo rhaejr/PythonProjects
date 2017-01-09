@@ -29,6 +29,7 @@ everything = cur.fetchall()
 #     # print("AK" in i)
 #     print(i)
 print(len(everything))
+print(everything[-1])
 
 print(cur.execute("SELECT count(*) FROM counties").fetchall()[0][0])
 

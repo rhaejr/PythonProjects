@@ -1,5 +1,5 @@
-import smtplib, datetime
-
+import smtplib
+from datetime import datetime
 import requests, csv, sqlite3, os
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
@@ -46,7 +46,7 @@ while not_done:
             state = row[0]
             county = row[1]
             date = row[2]
-            res = requests.get(row[3], verify=False)
+            res = requests.get(row[3], verify=False,)
             html = res.text
             os.makedirs('docs/{}/{}/{}'.format(state, county, date), exist_ok=True)
             file = open('docs/{}/{}/{}/{}-{}-{}.html'.format(state, county, date, state, county, date), 'w')
@@ -78,6 +78,7 @@ while not_done:
                                                                                                                             state,
                                                                                                                             county,
                                                                                                                             date))
+                print("{} {} {}".format(state, county, date))
                 conn.commit()
         conn.close()
         not_done = False
