@@ -48,18 +48,18 @@ while not_done:
             date = row[2]
             res = requests.get(row[3], verify=False,)
             html = res.text
-            os.makedirs('docs/{}/{}/{}'.format(state, county, date), exist_ok=True)
-            file = open('docs/{}/{}/{}/{}-{}-{}.html'.format(state, county, date, state, county, date), 'w')
+            os.makedirs('docs/docs/{}/{}/{}'.format(state, county, date), exist_ok=True)
+            file = open('docs/docs/{}/{}/{}/{}-{}-{}.html'.format(state, county, date, state, county, date), 'w')
             for line in html:
                 # line = line.strip('\n')
                 file.write(line)
             file.close()
 
-            data = table_parser('docs/{}/{}/{}/{}-{}-{}.html'.format(state, county, date, state, county, date))
+            data = table_parser('docs/docs/{}/{}/{}/{}-{}-{}.html'.format(state, county, date, state, county, date))
 
-            wg = 'docs/{}/{}/{}/{}-{}-{}_wg.csv'.format(state, county, date, state, county, date)
-            wl = 'docs/{}/{}/{}/{}-{}-{}_wl.csv'.format(state, county, date, state, county, date)
-            ws = 'docs/{}/{}/{}/{}-{}-{}_ws.csv'.format(state, county, date, state, county, date)
+            wg = 'docs/docs/{}/{}/{}/{}-{}-{}_wg.csv'.format(state, county, date, state, county, date)
+            wl = 'docs/docs/{}/{}/{}/{}-{}-{}_wl.csv'.format(state, county, date, state, county, date)
+            ws = 'docs/docs/{}/{}/{}/{}-{}-{}_ws.csv'.format(state, county, date, state, county, date)
 
             with open(wg, 'w', newline='') as f:
                 writer = csv.writer(f)
