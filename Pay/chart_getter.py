@@ -12,11 +12,11 @@ def table_parser(page):
     for line in file:
         if 'Grade' in line:
             num += 1
-        if num > 0:
+        if num > 0 and len(line.split())!=0:
             num += 1
         if 3 <= num < 21:
-            line = line.rstrip()
-            if line != '':
+            # line = line.rstrip()
+            if len(line.split())!=0:
                 split_line = line.split(' ')
                 split_line = [x for x in split_line if x != '']
                 strip_line = split_line[:16]
@@ -33,7 +33,8 @@ def table_parser(page):
         WS.append(l[11:16])
 
     file.close()
-    return WG, WL, WS
+    print(len(WG))
+    return WG[:15], WL[:15], WS[:15]
 # not_done = True
 # while not_done:
     # try:
@@ -48,14 +49,15 @@ for row in cur.fetchall():
     # res = requests.get(row[3], verify=False,)
     # html = res.text
     # os.makedirs('docs/{}/{}/{}'.format(state, county, date), exist_ok=True)
-    html = open('docs/{}/{}/{}/{}-{}-{}.html'.format(state, county, date, state, county, date), 'r')
-    reader = html.readlines()
-    html.close()
-    file = open('docs/{}/{}/{}/{}-{}-{}.html'.format(state, county, date, state, county, date), 'w')
-    for line in reader:
-        line = line.strip('\n')
-        file.write(line)
-    file.close()
+    # html = open('docs/{}/{}/{}/{}-{}-{}.html'.format(state, county, date, state, county, date), 'r')
+    # reader = html.readlines()
+    # html.close()
+    # file = open('docs/{}/{}/{}/{}-{}-{}.html'.format(state, county, date, state, county, date), 'w')
+    # for line in reader:
+    #     if not line.strip():
+    #     # line = line.strip('\n')
+    #         file.write(line)
+    # file.close()
 
     data = table_parser('docs/{}/{}/{}/{}-{}-{}.html'.format(state, county, date, state, county, date))
 

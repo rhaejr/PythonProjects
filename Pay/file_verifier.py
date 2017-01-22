@@ -37,27 +37,33 @@ for i in select:
         with open(file, 'r',) as f:
             reader = csv.reader(f)
             csv_list = list(reader)
-            print(len(csv_list))
-#             if len(csv_list) == 15:
-#                 for row in csv_list:
-#                     if len(row) == 5:
-#                         row = [cleanhtml(x) for x in row]
-#                         try:
-#                             row = [float(x) for x in row]
-#                         except ValueError:e
-#                             cur.execute(
-#                                 'update counties set verified="Float" where wg="{}" or wl="{}" or ws="{}"'.format(file,
-#                                                                                                                 file,
-#                                                                                                                 file))
-#                         # everything past here should be at least 15 grades and 5 steps
-#
-#                     else:
-#                         cur.execute(
-#                             'update counties set verified="Step" where wg="{}" or wl="{}" or ws="{}"'.format(file, file,
-#                                                                                                              file))
-#             else:
-#                 cur.execute('update counties set verified="Grade" where wg="{}" or wl="{}" or ws="{}"'.format(file, file, file))
-#     conn.commit()
+            # print(len(csv_list))
+            if len(csv_list) == 15:
+                for row in csv_list:
+                    if len(row) == 5:
+                        row = [cleanhtml(x) for x in row]
+                        try:
+                            row = [float(x) for x in row]
+                            cur.execute(
+                                'update counties set verified="Check" where wg="{}" or wl="{}" or ws="{}"'.format(file,
+                                                                                                                  file,
+                                                                                                                  file))
+                        except ValueError:
+                            cur.execute(
+                                'update counties set verified="Float" where wg="{}" or wl="{}" or ws="{}"'.format(file,
+                                                                                                                file,
+                                                                                                                file))
+                        # everything past here should be at least 15 grades and 5 steps
+
+
+                    else:
+                        cur.execute(
+                            'update counties set verified="Step" where wg="{}" or wl="{}" or ws="{}"'.format(file, file,
+                                                                                                             file))
+            else:
+                cur.execute('update counties set verified="Grade" where wg="{}" or wl="{}" or ws="{}"'.format(file, file, file))
+
+    conn.commit()
 
 
 
