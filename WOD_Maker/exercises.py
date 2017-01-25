@@ -229,6 +229,7 @@ exercises_casey = {
     'toes to bar': 7,
     'knees to elbow': 3}
 
+
 # exercises_bradley = {
 # 'wall ball': ,
 # 'thrusters': ,
@@ -262,7 +263,44 @@ exercises_casey = {
 # 'toes to bar': ,
 # 'knees to elbow': }
 
-exercises = []
+def score(ex_dict, exercise, reps, rounds=1):
+    weight = ex_dict[exercise]
+
+    return (reps * rounds) + weight  # ((weight * reps) ** rounds)/1000
+
+
+exercises = [
+    'wall ball',
+    'thrusters',
+    'power clean',
+    'dead lift',
+    'snatches',
+    'pull up',
+    'ctp-up',
+    'chin-up',
+    'back squat',
+    'front squats',
+    'air squats',
+    'burpies',
+    'hand stand push up',
+    'push-up',
+    'muscle-up',
+    'hang clean',
+    'high hang clean',
+    'run',
+    'kettle-bell',
+    'double-under',
+    'push press',
+    'split jerk',
+    'over head squat',
+    'push jerk',
+    'squat clean',
+    'squat snatch',
+    'sit ups',
+    'ghd sit up',
+    'dips',
+    'toes to bar',
+    'knees to elbow']
 temp = []
 players = [exercises_casey, exercises_hood, exercises_kyle, exercises_rhea, exercises_strider, exercises_zach]
 for key in exercises_zach.keys():
@@ -277,3 +315,11 @@ for p in players:
 
 for i in exercises:
     print(i)
+
+ball = score(exercises_zach,'wall ball', 30, 3)
+clean = score(exercises_zach,'power clean', 30, 3)
+run = score(exercises_zach, 'run', 4, 3)
+print(ball)
+print(clean)
+print(run)
+print(ball + clean + run)
