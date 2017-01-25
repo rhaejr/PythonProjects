@@ -264,9 +264,15 @@ exercises_casey = {
 # 'knees to elbow': }
 
 def score(ex_dict, exercise, reps, rounds=1):
+    total_score = 0
     weight = ex_dict[exercise]
+    for i in range(rounds):
+        if i != 0:
+            weight += weight
+        rounds_score = reps * weight
+        total_score += rounds_score
 
-    return (reps * rounds) + weight  # ((weight * reps) ** rounds)/1000
+    return total_score  # (reps * rounds) + weight  # ((weight * reps) ** rounds)/1000
 
 
 exercises = [
@@ -316,9 +322,9 @@ for p in players:
 for i in exercises:
     print(i)
 
-ball = score(exercises_zach,'wall ball', 30, 3)
-clean = score(exercises_zach,'power clean', 30, 3)
-run = score(exercises_zach, 'run', 4, 3)
+ball = score(exercises_rhea,'wall ball', 30, 3)
+clean = score(exercises_rhea,'power clean', 30, 3)
+run = score(exercises_rhea, 'run', 4, 3)
 print(ball)
 print(clean)
 print(run)
