@@ -72,7 +72,7 @@ unemployment = {t[0]:t[1] for t in test}
 # with open('data/unemployment.json') as fin:
 #     unemployment = json.load(fin)
 
-cmap = ColorMap('inferno', alpha=255, levels=10)
+cmap = ColorMap('plasma', alpha=255, levels=10)
 geoplotlib.geojson('data/gz_2010_us_050_00_20m.json', fill=True, color=get_color, f_tooltip=(lambda properties: properties['NAME']))
 geoplotlib.geojson('data/gz_2010_us_050_00_20m.json', fill=False, color=[255, 255, 255, 64])
 geoplotlib.set_bbox(BoundingBox.USA)
