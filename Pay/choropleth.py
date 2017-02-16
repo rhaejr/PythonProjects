@@ -13,8 +13,9 @@ scale = 18
 start = 18
 conn = sqlite3.connect('wages.db')
 cur = conn.cursor()
-year = '2000'
+year = '2016'
 grade = 'wg10'
+
 
 cur.execute('select date, state, county, {} from counties where date like "%{}%"'.format(grade, year))
 counties = cur.fetchall()
@@ -73,7 +74,7 @@ print(unemployment)
 # with open('data/unemployment.json') as fin:
 #     unemployment = json.load(fin)
 
-cmap = ColorMap('plasma', alpha=255, levels=10)
+cmap = ColorMap('Reds', alpha=255, levels=10)
 geoplotlib.geojson('data/gz_2010_us_050_00_20m.json', fill=True, color=get_color, f_tooltip=(lambda properties: properties['NAME'] + ' ' + str(unemployment.get(str(properties['STATE']) + properties['COUNTY']))))
 geoplotlib.geojson('data/gz_2010_us_050_00_20m.json', fill=False, color=[255, 255, 255, 64])
 geoplotlib.set_bbox(BoundingBox.USA)
