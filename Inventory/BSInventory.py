@@ -11,7 +11,7 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
-
+        self.apache_action()
         self.actionLUH.triggered.connect(self.luh_action)
         self.actionApache.triggered.connect(self.apache_action)
 
@@ -23,9 +23,9 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
 
     def apache_action(self):
         self.main_label.setText('Apache')
-        rows = cur.execute('select * from benchstock where acft="apache"').fetchall()
+        rows = cur.execute('select nsn, pn, niin, location, desc, remarks from benchstock where acft="apache"').fetchall()
         self.tableWidget.setRowCount(len(rows))
-        self.tableWidget.setColumnCount(7)
+        self.tableWidget.setColumnCount(6)
         row_num = 0
         for row in rows:
             column = 0
@@ -33,6 +33,9 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
                 self.tableWidget.setItem(row_num, column, Qt.QTableWidgetItem(str(cell)))
                 column += 1
             row_num += 1
+
+        self.tableWidget.setHorizontalHeaderLabels(
+            ['nsn', 'pn', 'niin', 'location', 'description', 'remarks'])
 
 
 def main():
@@ -45,3 +48,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
