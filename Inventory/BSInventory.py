@@ -7,35 +7,116 @@ from gui import Ui_MainWindow
 conn = sqlite3.connect('inventory.db')
 cur = conn.cursor()
 
+# nsn, pn, desc, remarks, location, niin, acft
+
+
 class Main(Qt.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setupUi(self)
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
         self.apache_action()
-        self.actionLUH.triggered.connect(self.luh_action)
-        self.actionApache.triggered.connect(self.apache_action)
+        self.acft = 'apache'
+        self.ui.actionLUH.triggered.connect(self.luh_action)
+        self.ui.actionApache.triggered.connect(self.apache_action)
+        self.ui.add_button.clicked.connect(self.add_item)
+        self.ui.search_button.clicked.connect(self.search)
 
 
 
     def luh_action(self):
-        self.main_label.setText('LUH')
-
-
-    def apache_action(self):
-        self.main_label.setText('Apache')
-        rows = cur.execute('select nsn, pn, niin, location, desc, remarks from benchstock where acft="apache"').fetchall()
-        self.tableWidget.setRowCount(len(rows))
-        self.tableWidget.setColumnCount(6)
+        self.ui.main_label.setText('LUH')
+        self.acft = 'luh'
+        self.ui.tableWidget.clear()
+        rows = cur.execute(
+            'select pn, location, desc, remarks from benchstock where acft="luh"').fetchall()
+        self.ui.tableWidget.setRowCount(len(rows))
+        self.ui.tableWidget.setColumnCount(4)
         row_num = 0
         for row in rows:
             column = 0
             for cell in row:
-                self.tableWidget.setItem(row_num, column, Qt.QTableWidgetItem(str(cell)))
+                self.ui.tableWidget.setItem(row_num, column, Qt.QTableWidgetItem(str(cell)))
                 column += 1
             row_num += 1
 
-        self.tableWidget.setHorizontalHeaderLabels(
+        self.ui.tableWidget.setHorizontalHeaderLabels(
+            ['pn', 'location', 'description', 'remarks'])
+
+
+    def apache_action(self):
+        self.ui.main_label.setText('Apache')
+        self.acft = 'apache'
+        self.ui.tableWidget.clear()
+        rows = cur.execute('select nsn, pn, niin, location, desc, remarks from benchstock where acft="apache"').fetchall()
+        self.ui.tableWidget.setRowCount(len(rows))
+        self.ui.tableWidget.setColumnCount(6)
+        row_num = 0
+        for row in rows:
+            column = 0
+            for cell in row:
+                self.ui.tableWidget.setItem(row_num, column, Qt.QTableWidgetItem(str(cell)))
+                column += 1
+            row_num += 1
+
+        self.ui.tableWidget.setHorizontalHeaderLabels(
             ['nsn', 'pn', 'niin', 'location', 'description', 'remarks'])
+
+    # nsn, pn, desc, remarks, location, niin, acft
+    def add_item(self):
+        fields = [[self.ui.nsn_edit.text().upper(), 'nsn'],
+                  [self.ui.pn_edit.text().upper(), 'pn'],
+                  [self.ui.desc_edit.text().upper(), 'desc'],
+                  [self.ui.remarks_edit.text().upper(), 'remarks'],
+                  [self.ui.loc_edit.text().upper().upper(), 'location'],
+                  [self.ui.niin_edit.text().upper(), 'niin']]
+        matches = False
+        for f in fields:
+            if f[0] != '':
+                cur.execute('select * from benchstock where {} = "{}"'.format(f[1], f[0]))
+                if len(cur.fetchall()) > 0:
+                    matches = True
+        if matches == False:
+
+            cur.execute('insert into benchstock values(?,?,?,?,?,?,?)', (fields[0][0], fields[1][0], fields[2][0],
+                                                                                 fields[3][0], fields[4][0], fields[5][0],
+                                                                                 self.acft))
+            conn.commit()
+            if self.acft == 'apache':
+                self.apache_action()
+            else:
+                self.luh_action()
+
+
+
+    def search(self):
+        self.ui.tableWidget.clear()
+        fields = [[self.ui.nsn_search_edit.text(), 'nsn'],
+                  [self.ui.niin_search_edit.text(), 'niin'],
+                  [self.ui.pn_search_edit.text(), 'pn'],
+                  [self.ui.desc_search_edit.text(), 'desc'],
+                  [self.ui.loc_search_edit.text(), 'location'],
+                  [self.ui.remarks_search_edit.text(), 'remarks']]
+        rows = set()
+        for i in fields:
+            if i[0] != '':
+                select = cur.execute(
+                    'select nsn, pn, niin, location, desc, remarks from benchstock where acft="{}" and {} like "%{}%"'.format(self.acft, i[1], i[0])).fetchall()
+                if len(select) != 0:
+                    rows.update(select)
+        self.ui.tableWidget.setRowCount(len(rows))
+        self.ui.tableWidget.setColumnCount(6)
+        row_num = 0
+        for row in rows:
+            column = 0
+            for cell in row:
+                self.ui.tableWidget.setItem(row_num, column, Qt.QTableWidgetItem(str(cell)))
+                column += 1
+            row_num += 1
+
+        self.ui.tableWidget.setHorizontalHeaderLabels(
+            ['nsn', 'pn', 'niin', 'location', 'description', 'remarks'])
+
 
 
 def main():

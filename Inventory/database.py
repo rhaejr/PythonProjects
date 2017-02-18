@@ -20,7 +20,7 @@ with open('inventory.csv', 'r') as f:
 
 for i in csv_list:
     try:
-        cur.execute('insert into benchstock values(?,"",?,?,?,?,"apache")', (i[1], i[2], i[3], i[0], i[1][4:]))
+        cur.execute('insert into benchstock values(?,"",?,?,?,?,"apache")', (i[1].upper(), i[2].upper(), i[3].upper(), i[0].upper(), i[1][4:].upper()))
     except:
         print(i)
 

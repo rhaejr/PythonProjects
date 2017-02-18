@@ -142,7 +142,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="remarks_edit"/>
+         <widget class="QLineEdit" name="remarks_search_edit"/>
         </item>
        </layout>
       </item>
@@ -237,16 +237,27 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="remarks_edit_2"/>
+         <widget class="QLineEdit" name="remarks_edit"/>
         </item>
        </layout>
       </item>
       <item>
-       <widget class="QPushButton" name="update_button">
-        <property name="text">
-         <string>Update</string>
-        </property>
-       </widget>
+       <layout class="QVBoxLayout" name="verticalLayout_14">
+        <item>
+         <widget class="QPushButton" name="update_button">
+          <property name="text">
+           <string>Update</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="add_button">
+          <property name="text">
+           <string>Add</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -262,7 +273,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMain">
