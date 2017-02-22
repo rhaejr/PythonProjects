@@ -53,3 +53,10 @@ Pay/data.zip
 Pay/testwages.db
 Pay/testwages.db-journal
 *.mp4
+Pay/test,ws.csv
+Pay/test_wg.csv
+Pay/test_wl.csv
+*.m4a
+Pay/test_ws.csv
+udacity/data anlitics/lesson1/daily_engagement.csv
+udacity/data anlitics/lesson1/project_submissions.csv
