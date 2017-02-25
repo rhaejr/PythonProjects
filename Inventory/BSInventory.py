@@ -51,9 +51,6 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
         self.ui.tableWidget.resizeColumnsToContents()
 
 
-        # header = self.ui.tableWidget.horizontalHeader()
-        # header.setStretchLastSection(True)
-        # self.ui.tableWidget.resizeColumnsToContents()
     def apache_action(self):
         self.ui.main_label.setText('Apache')
         self.acft = 'apache'
@@ -129,7 +126,7 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
                   [self.ui.loc_edit.text(), 'location'],
                   [self.ui.remarks_edit.text(), 'remarks']]
         cur.execute('update benchstock set nsn="{}", niin="{}", pn="{}", desc="{}", location="{}", remarks="{}" where nsn="{}"'.format(
-            fields[0][0], fields[1][0], fields[2][0], fields[3][0], fields[4][0], fields[5][0], fields[0][0]))
+            fields[0][0], fields[1][0], fields[2][0], fields[3][0], fields[4][0], fields[5][0], fields[0][0]).upper())
 
         conn.commit()
         if self.acft == 'apache':

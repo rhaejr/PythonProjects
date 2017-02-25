@@ -3,7 +3,7 @@ import sqlite3, csv
 conn = sqlite3.connect('inventory.db')
 cur = conn.cursor()
 cur.execute('''CREATE TABLE IF NOT EXISTS benchstock(
-nsn TEXT     NOT NULL,
+nsn TEXT   PRIMARY KEY   NOT NULL ,
 pn    TEXT ,
 desc    TEXT ,
 remarks    TEXT ,
