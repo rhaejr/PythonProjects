@@ -60,3 +60,5 @@ Pay/test_wl.csv
 Pay/test_ws.csv
 udacity/data anlitics/lesson1/daily_engagement.csv
 udacity/data anlitics/lesson1/project_submissions.csv
+*.pyc
+*.pyc

@@ -1,4 +1,5 @@
-import npc, rooms, player,sys
+import npc, rooms, player,sys, os
+os.system("pyuic4 -o gui.py gui.ui")
 from PyQt4 import Qt
 from gui import Ui_MainWindow
 
