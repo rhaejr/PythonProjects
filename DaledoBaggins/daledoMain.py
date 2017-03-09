@@ -1,8 +1,11 @@
-import random
+import random, sys
 import pygame
 from pytmx.util_pygame import load_pygame
 from map import Map
 from character import Character
+from test_gui import MainWindow, ImageWidget
+from PyQt4 import QtGui
+
 
 
 # color variables
@@ -20,7 +23,7 @@ display_height = (tile_size * tiles)
 # Init
 pygame.init()
 gameDisplay = pygame.display.set_mode((display_width, display_height))
-pygame.display.set_caption('The Legend of Roscoe Jenkins')
+pygame.display.set_caption('The Legend of Daledo Baggins')
 clock = pygame.time.Clock()
 
 # Level and player character init
@@ -101,6 +104,9 @@ def game_loop():
 # pygame.mixer.init()
 # pygame.mixer.music.load(sound)
 # pygame.mixer.music.play()
+# app=QtGui.QApplication(sys.argv)
+# w=MainWindow(gameDisplay)
+# w.show()
 game_loop()
 
 pygame.quit()
