@@ -18,12 +18,15 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
         self.issue_to = ''
+        self.acft = ''
 
         self.ui.setupUi(self)
         self.tool_list()
         self.fill_drop_down()
+        self.fill_acft_dropdown()
 
         self.ui.return_btn.clicked.connect(self.return_tool)
+        self.ui.acft_list.activated[str].connect(self.acft_select)
         self.ui.user_list.activated[str].connect(self.user_select)
         self.ui.issue_btn.clicked.connect(self.issue_tool)
         self.ui.add_user_btn.clicked.connect(self.add_user)
@@ -105,6 +108,14 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
         for row in rows:
             self.ui.user_list.addItem(row[0])
 
+    def fill_acft_dropdown(self):
+        acft_list = ['72030','72137','72138','72140','72040','72041','72238','72','087','227','215','161','111']
+        self.ui.acft_list.addItem('')
+        self.ui.acft_list.addItems(acft_list)
+
+    def acft_select(self, text):
+        self.acft = text
+
     def user_select(self, text):
         self.issue_to = text
         # cur.execute(
@@ -128,7 +139,6 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
     def issue_tool(self):
         # self.ui.remarks_edit.setText(self.issue_to)
         check_out = dt.datetime.now().strftime(dt_format)
-        acft = 'test'
         print(self.issue_to)
         fields = [[self.ui.id_edit.text().upper(), 'id'],
                   [self.ui.desc_edit.text().upper(), 'desc'],
@@ -152,7 +162,7 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
 
             cur.execute('update tools set issue="{}", desc="{}", location="{}", remarks="{}" where id="{}"'.format(
                 self.issue_to,fields[1][0], fields[2][0], fields[3][0], fields[0][0]).upper())
-            cur.execute('insert into issues values(?,?,?,?,?,?)', (fields[0][0], '', check_out,  self.issue_to, acft, fields[3][0]))
+            cur.execute('insert into issues values(?,?,?,?,?,?)', (fields[0][0], '', check_out,  self.issue_to, self.acft, fields[3][0]))
 
         conn.commit()
         self.tool_list()

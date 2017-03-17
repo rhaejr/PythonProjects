@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>801</width>
     <height>600</height>
    </rect>
   </property>
@@ -85,7 +85,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="acft_edit"/>
+           <widget class="QComboBox" name="acft_list"/>
           </item>
          </layout>
         </item>
@@ -188,7 +188,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>801</width>
      <height>26</height>
     </rect>
    </property>
