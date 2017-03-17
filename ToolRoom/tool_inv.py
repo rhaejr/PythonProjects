@@ -1,11 +1,12 @@
 import sys, sqlite3
 from collections import OrderedDict
+import datetime as dt
 
 
 from PyQt4 import Qt
 from PyQt4.uic import loadUi
 from gui_tr import Ui_MainWindow
-
+dt_format = "%H%M %d%b%y"
 conn = sqlite3.connect('toolroom.db')
 cur = conn.cursor()
 
@@ -16,10 +17,15 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
+        self.issue_to = ''
+
         self.ui.setupUi(self)
         self.tool_list()
         self.fill_drop_down()
 
+        self.ui.return_btn.clicked.connect(self.return_tool)
+        self.ui.user_list.activated[str].connect(self.user_select)
+        self.ui.issue_btn.clicked.connect(self.issue_tool)
         self.ui.add_user_btn.clicked.connect(self.add_user)
         self.ui.add.clicked.connect(self.add_item)
         self.ui.update.clicked.connect(self.update_db)
@@ -100,31 +106,78 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
             self.ui.user_list.addItem(row[0])
 
     def user_select(self, text):
-        if text == "Select user...":
-            return
-        self.leave_form.name, self.leave_form.ssn = text.split(' - ')
-        cur.execute(
-            "SELECT from_date, to_date,from_time,to_time,leave_type,remarks,signed,hours  FROM leave_forms WHERE ID=" + self.leave_form.ssn)
-        rows = cur.fetchall()
-        self.form_table.setRowCount(len(rows))
-        try:
-            self.form_table.setColumnCount(len(rows[0]))
-        except IndexError:
-            self.form_table.setColumnCount(11)
-        row_num = 0
-        for row in rows:
-            column = 0
-            for cell in row:
-                self.form_table.setItem(row_num, column, Qt.QTableWidgetItem(str(cell)))
-                column += 1
-            row_num += 1
-        self.form_table.setHorizontalHeaderLabels(
-            ['from date', 'to date', 'from time', 'to time', 'leave type', 'remarks', 'signed', 'hours'])
+        self.issue_to = text
+        # cur.execute(
+        #     "SELECT from_date, to_date,from_time,to_time,leave_type,remarks,signed,hours  FROM leave_forms WHERE ID=" + self.leave_form.ssn)
+        # rows = cur.fetchall()
+        # self.form_table.setRowCount(len(rows))
+        # try:
+        #     self.form_table.setColumnCount(len(rows[0]))
+        # except IndexError:
+        #     self.form_table.setColumnCount(11)
+        # row_num = 0
+        # for row in rows:
+        #     column = 0
+        #     for cell in row:
+        #         self.form_table.setItem(row_num, column, Qt.QTableWidgetItem(str(cell)))
+        #         column += 1
+        #     row_num += 1
+        # self.form_table.setHorizontalHeaderLabels(
+        #     ['from date', 'to date', 'from time', 'to time', 'leave type', 'remarks', 'signed', 'hours'])
+
+    def issue_tool(self):
+        # self.ui.remarks_edit.setText(self.issue_to)
+        check_out = dt.datetime.now().strftime(dt_format)
+        acft = 'test'
+        print(self.issue_to)
+        fields = [[self.ui.id_edit.text().upper(), 'id'],
+                  [self.ui.desc_edit.text().upper(), 'desc'],
+                  [self.ui.loc_edit.text().upper().upper(), 'location'],
+                  [self.ui.remarks_edit.text().upper(), 'remarks']]
+        cur.execute('select check_out, check_in from issues where id="{}"'.format(fields[0][0]))
+        select = cur.fetchall()
+        checked_in = True
+        print(len(select))
+        if len(select) != 0:
+            print(1)
+            for i in select:
+                if i[0] != '':
+                    print(2)
+                    if i[1] == '':
+                        checked_in = False
+                        print(False)
+
+        if checked_in:
+
+
+            cur.execute('update tools set issue="{}", desc="{}", location="{}", remarks="{}" where id="{}"'.format(
+                self.issue_to,fields[1][0], fields[2][0], fields[3][0], fields[0][0]).upper())
+            cur.execute('insert into issues values(?,?,?,?,?,?)', (fields[0][0], '', check_out,  self.issue_to, acft, fields[3][0]))
+
+        conn.commit()
+        self.tool_list()
+
+    def return_tool(self):
+        check_in = dt.datetime.now().strftime(dt_format)
+        acft = 'test'
+        print(self.issue_to)
+        fields = [[self.ui.id_edit.text().upper(), 'id'],
+                  [self.ui.desc_edit.text().upper(), 'desc'],
+                  [self.ui.loc_edit.text().upper().upper(), 'location'],
+                  [self.ui.remarks_edit.text().upper(), 'remarks']]
+
+
+        cur.execute('update issues set check_in="{}", remarks="{}" where id="{}" and check_in=""'.format(check_in, fields[3][0], fields[0][0]))
+        cur.execute('update tools set issue="IN", remarks="{}" where id="{}"'.format(fields[3][0], fields[0][0]))
+
+        conn.commit()
+        self.tool_list()
+
 
     def add_user(self):
 
-        first = self.ui.first_edit.text()
-        last = self.ui.last_edit.text()
+        first = self.ui.first_edit.text().capitalize()
+        last = self.ui.last_edit.text().capitalize()
 
 
         try:

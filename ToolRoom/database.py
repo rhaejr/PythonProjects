@@ -14,5 +14,13 @@ cur.execute('''CREATE TABLE IF NOT EXISTS users(
 id TEXT   PRIMARY KEY   NOT NULL
 );''')
 
+cur.execute('''CREATE TABLE IF NOT EXISTS issues(
+id TEXT  NOT NULL,
+check_in text,
+check_out text,
+issue text,
+acft text,
+remarks text);''')
+
 
 
