@@ -62,3 +62,6 @@ udacity/data anlitics/lesson1/daily_engagement.csv
 udacity/data anlitics/lesson1/project_submissions.csv
 *.pyc
 *.pyc
+CharlesResume.txt
+Game/agario.py
+Game/astroids.py
