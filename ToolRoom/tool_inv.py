@@ -25,6 +25,7 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
         self.fill_drop_down()
         self.fill_acft_dropdown()
 
+        # self.ui.id_edit.returnPressed.connect(self.load_from_table)
         self.ui.return_btn.clicked.connect(self.return_tool)
         self.ui.acft_list.activated[str].connect(self.acft_select)
         self.ui.user_list.activated[str].connect(self.user_select)
