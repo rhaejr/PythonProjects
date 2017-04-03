@@ -1,6 +1,6 @@
-import sys, sqlite3
+import sqlite3
 
-from PyQt4 import Qt
+from PyQt5 import Qt
 from gui import Ui_MainWindow
 
 conn = sqlite3.connect('inventory.db')
@@ -167,11 +167,11 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
 
 
 def main():
-    app = Qt.QApplication(sys.argv)
+    app = Qt.QApplication([])
     main_view = Main()
     main_view.show()
 
-    sys.exit(app.exec_())
+    app.exec_()
 
 
 if __name__ == "__main__":
