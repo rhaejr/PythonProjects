@@ -1,5 +1,5 @@
 import sqlite3
-from PyQt5 import Qt
+from PyQt4 import Qt
 from gui_track import Ui_MainWindow
 
 conn = sqlite3.connect('track.db')
@@ -32,17 +32,38 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        # initialized variables
+        self.activated = ''
+        self.acft_activated = ''
+        self.acft_list = ['111', '161', '087', '215', '227', '030', '040', '041', '137', '138', '139', '140', '238']
+
+
         self.defaults()
-        self.fill_activity()
+
+
+
+
+        # Connections
         self.ui.add_changes_btn.clicked.connect(self.add_changes)
         self.ui.add_activity_btn.clicked.connect(self.add_activity)
-
-
+        self.ui.activity_comboBox.activated[str].connect(self.activated_activity)
+        self.ui.acft_comboBox.activated[str].connect(self.activated_acft)
 
     def defaults(self):
         self.ui.dateEdit.setDate(Qt.QDate.currentDate())
+        self.fill_activity()
+        self.fill_acft()
+        self.fill_tree()
+
+    def activated_activity(self, activated):
+        self.activated = activated
+        print(self.activated)
+
+    def activated_acft(self, acft_activated):
+        self.acft_activated = acft_activated
+
     def current_text(self):
-        current = (self.ui.activity_edit.text(),
+        current = (self.activated,
                    self.ui.blue_pc_edit.text(),
                    self.ui.red_pc_edit.text(),
                    self.ui.yellow_pc_edit.text(),
@@ -69,15 +90,14 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
 
         activity = self.ui.activity_edit.text()
 
-        try:
-            cur.execute("INSERT INTO activities VALUES(?, '')", activity)
+        if self.acft_activated != '':
+            cur.execute("INSERT INTO activities VALUES('{}', '{}')".format(activity,self.acft_activated))
             conn.commit()
             self.ui.activity_comboBox.clear()
             self.fill_activity()
-        except sqlite3.IntegrityError:
-            print('fail')
 
     def fill_activity(self):
+        self.ui.activity_comboBox.clear()
         activities = []
         cur.execute('''SELECT activity FROM activities''')
         rows = cur.fetchall()
@@ -85,6 +105,24 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
             activities.append(row[0])
         self.ui.activity_comboBox.addItem('...')
         self.ui.activity_comboBox.addItems(activities)
+
+    def fill_acft(self):
+        self.ui.acft_comboBox.clear()
+        self.ui.acft_comboBox.addItem('...')
+        self.ui.acft_comboBox.addItems(self.acft_list)
+
+    def fill_tree(self):
+        tree_dict = {}
+        for i in self.acft_list:
+            rows = cur.execute('select activity from activities where acft="{}"'.format(i)).fetchall()
+            tree_dict[i] = rows
+        # for key in tree_dict.keys():
+        #     tree_item = Qt.QTreeWidgetItem()
+        #
+        #     for item in tree_dict[key]:
+
+        print(tree_dict)
+
 
 
 
@@ -98,3 +136,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    conn.close()
