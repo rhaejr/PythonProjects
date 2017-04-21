@@ -2,7 +2,6 @@ import sys, sqlite3
 from collections import OrderedDict
 import datetime as dt
 
-
 from PyQt4 import Qt
 from PyQt4.uic import loadUi
 from gui_tr import Ui_MainWindow
