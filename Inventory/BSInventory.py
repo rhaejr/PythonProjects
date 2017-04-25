@@ -16,7 +16,13 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
         self.ui.setupUi(self)
         self.apache_action()
         self.acft = 'apache'
+
         self.ui.nsn_search_edit.returnPressed.connect(self.search)
+        self.ui.niin_search_edit.returnPressed.connect(self.search)
+        self.ui.desc_search_edit.returnPressed.connect(self.search)
+        self.ui.loc_search_edit.returnPressed.connect(self.search)
+        self.ui.pn_search_edit.returnPressed.connect(self.search)
+        self.ui.remarks_search_edit.returnPressed.connect(self.search)
         self.ui.actionLUH.triggered.connect(self.luh_action)
         self.ui.actionApache.triggered.connect(self.apache_action)
         self.ui.add_button.clicked.connect(self.add_item)
