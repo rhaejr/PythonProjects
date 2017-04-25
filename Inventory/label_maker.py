@@ -33,24 +33,31 @@ def draw_label(label, width, height, obj):
     label.add(shapes.String(2, 2, str(obj[0]), fontName="Helvetica", fontSize=14))
     label.add(shapes.String(2, 16, str(obj[1]), fontName="Helvetica", fontSize=14 ))
     label.add(shapes.String(2, 28, str(obj[2]), fontName="Helvetica", fontSize=14))
-    label.add(shapes.String(38, 30, str(obj[3]), fontName="3of9", fontSize=30))
-    label.add(shapes.String(2, 55, str(obj[4]), fontName="Helvetica", fontSize=14))
+    # print(obj[3])
+    label.add(shapes.Image(2, 55, 180, 40, make_barcode(obj[3])))
+    # label.add(shapes.String(38, 30, str(obj[3]), fontName="3of9", fontSize=30))
+    # label.add(shapes.String(2, 55, str(obj[4]), fontName="Helvetica", fontSize=14))
 
-
+def make_barcode(code):
+    code = str(code)
+    ean = barcode.get('ean13', code, writer=ImageWriter())
+    filename = ean.save('barcodes/{}'.format(code))
+    return filename
 # Create the sheet.
 sheet = labels.Sheet(specs, draw_label, border=True)
 # trying to make barcode
-ean = barcode.get('ean13', '123456789102', writer=ImageWriter())
-filename = ean.save('ean13')
+# ean = barcode.get('ean13', '1234121231234', writer=ImageWriter())
+# filename = ean.save('ean13')
 
 sheet.partial_page(1, ((1, 1), (2, 2), (4, 2)))
 # Add a couple of labels.
 s = '1234121231234'
 n = '{}-{}-{}-{}'.format(s[:-9],s[-9:-7],s[-7:-4],s[-4:])
-sheet.add_label([ 'Nomenclature','Part No.', 'Location', '1234-12-123-1234',n])
+sheet.add_label([ 'Nomenclature','Part No.', 'Location', '1234121231234',n])
 for row in db:
-    nsn = '{}-{}-{}-{}'.format(row[4][:-9],row[4][-9:-7],row[4][-7:-4],row[4][-4:])
-    sheet.add_label([row[0],row[1],row[2],row[3],nsn])
+    if row[3] != '':
+        nsn = '{}-{}-{}-{}'.format(row[4][:-9],row[4][-9:-7],row[4][-7:-4],row[4][-4:])
+        sheet.add_label([row[0],row[1],row[2],int(row[3]),nsn])
 # sheet.add_label("Hello")
 # sheet.add_label("World")
 
