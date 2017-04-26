@@ -13,7 +13,7 @@ db = cur.execute('select desc, pn, location, nsn, nsn from benchstock where acft
 
 font_path = 'fonts'
 big_lablels = (101, 34, 2, 7)
-address_labels = (66.675, 25.4, 3, 10)
+address_labels = (66.675, 25, 3, 10)
 label_width , label_height, columns, rows = address_labels
 
 registerFont(TTFont('3of9', os.path.join(font_path, 'free3of9.ttf')))
