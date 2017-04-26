@@ -21,8 +21,8 @@ registerFont(TTFont('3of9', os.path.join(font_path, 'free3of9.ttf')))
 # labels. Each label is 90mm x 25mm with a 2mm rounded corner. The margins are
 # automatically calculated.
 # 215.9 by 279.4 mm
-specs = labels.Specification(215.9, 271, columns, rows, label_width, label_height,  top_margin=9, bottom_margin=8,
-                             left_margin=4, right_margin=4, top_padding=0, bottom_padding=0,
+specs = labels.Specification(210, 297, columns, rows, label_width, label_height,
+                              top_padding=0, bottom_padding=0,
                              row_gap=0)
 
 # Create a function to draw each label. This will be given the ReportLab drawing
