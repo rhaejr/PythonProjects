@@ -21,7 +21,8 @@ registerFont(TTFont('3of9', os.path.join(font_path, 'free3of9.ttf')))
 # labels. Each label is 90mm x 25mm with a 2mm rounded corner. The margins are
 # automatically calculated.
 # 215.9 by 279.4 mm
-specs = labels.Specification(215,279.4, columns, rows, label_width, label_height, row_gap=0, column_gap=4,)
+specs = labels.Specification(215,279.4, columns, rows, label_width, label_height, row_gap=0, column_gap=4,top_padding=1,
+                             bottom_padding=1, right_padding=1)
 
 # Create a function to draw each label. This will be given the ReportLab drawing
 # object to draw on, the dimensions (NB. these will be in points, the unit
@@ -55,7 +56,7 @@ def make_barcode(code):
     filename = ean.save('barcodes/{}'.format(code),{'font_size':14, 'text_distance':2})
     return filename
 # Create the sheet.
-sheet = labels.Sheet(specs, draw_label_top_bc, border=True)
+sheet = labels.Sheet(specs, draw_label_top_bc, border=False)
 # trying to make barcode
 # ean = barcode.get('ean13', '1234121231234', writer=ImageWriter())
 # filename = ean.save('ean13')
