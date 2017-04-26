@@ -13,7 +13,7 @@ db = cur.execute('select desc, pn, location, nsn, nsn from benchstock where acft
 
 font_path = 'fonts'
 big_lablels = (101, 34, 2, 7)
-address_labels = (66.675, 25.4, 3, 10)
+address_labels = (66.675, 26.4, 3, 10)
 label_width , label_height, columns, rows = address_labels
 
 registerFont(TTFont('3of9', os.path.join(font_path, 'free3of9.ttf')))
@@ -21,9 +21,7 @@ registerFont(TTFont('3of9', os.path.join(font_path, 'free3of9.ttf')))
 # labels. Each label is 90mm x 25mm with a 2mm rounded corner. The margins are
 # automatically calculated.
 # 215.9 by 279.4 mm
-specs = labels.Specification(210, 297, columns, rows, label_width, label_height,
-                              top_padding=0, bottom_padding=0,
-                             row_gap=0)
+specs = labels.Specification(215,279, columns, rows, label_width, label_height, row_gap=0)
 
 # Create a function to draw each label. This will be given the ReportLab drawing
 # object to draw on, the dimensions (NB. these will be in points, the unit
