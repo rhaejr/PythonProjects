@@ -61,7 +61,7 @@ sheet = labels.Sheet(specs, draw_label_top_bc, border=False)
 # ean = barcode.get('ean13', '1234121231234', writer=ImageWriter())
 # filename = ean.save('ean13')
 
-sheet.partial_page(1, ((1, 1), (2, 2), (4, 2)))
+# sheet.partial_page(1, ((1, 1), (2, 2), (4, 2)))
 # Add a couple of labels.
 s = '1234121231234'
 n = '{}-{}-{}-{}'.format(s[:-9],s[-9:-7],s[-7:-4],s[-4:])
