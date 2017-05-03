@@ -1,5 +1,5 @@
 import sys, sqlite3
-
+from mytools import calculate_checksum
 from PyQt4 import Qt
 from gui import Ui_MainWindow
 
