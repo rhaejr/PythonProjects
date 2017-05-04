@@ -17,17 +17,12 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
         self.apache_action()
         self.acft = 'apache'
 
-        self.ui.nsn_search_edit.returnPressed.connect(self.search)
-        self.ui.niin_search_edit.returnPressed.connect(self.search)
-        self.ui.desc_search_edit.returnPressed.connect(self.search)
-        self.ui.loc_search_edit.returnPressed.connect(self.search)
-        self.ui.pn_search_edit.returnPressed.connect(self.search)
-        self.ui.remarks_search_edit.returnPressed.connect(self.search)
+        self.ui.search_edit.returnPressed.connect(self.search)
         self.ui.actionLUH.triggered.connect(self.luh_action)
         self.ui.actionApache.triggered.connect(self.apache_action)
         self.ui.add_button.clicked.connect(self.add_item)
         self.ui.search_button.clicked.connect(self.search)
-        self.ui.select_row_button.clicked.connect(self.load_from_table)
+        self.ui.reset_table_button.clicked.connect(self.reset_table)
         self.ui.update_button.clicked.connect(self.update_db)
         self.ui.tableWidget.doubleClicked.connect(self.load_from_table)
         self.ui.tableWidget.setEditTriggers(Qt.QAbstractItemView.NoEditTriggers)
@@ -35,6 +30,11 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
         self.header.setStretchLastSection(True)
 
 
+    def reset_table(self):
+        if self.acft == 'luh':
+            self.luh_action()
+        if self.acft == 'apache':
+            self.apache_action()
 
     def luh_action(self):
         self.ui.main_label.setText('LUH')
@@ -90,7 +90,8 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
                   [self.ui.niin_edit.text().upper(), 'niin']]
         matches = False
         for f in fields:
-            if f[0] != '':
+
+            if f[0] != '' and (f[1] != 'desc' or f[1] != 'remarks'):
                 cur.execute('select * from benchstock where {} = "{}"'.format(f[1], f[0]))
                 if len(cur.fetchall()) > 0:
                     matches = True
@@ -145,17 +146,12 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
 
     def search(self):
         self.ui.tableWidget.clear()
-        fields = [[self.ui.nsn_search_edit.text(), 'nsn'],
-                  [self.ui.niin_search_edit.text(), 'niin'],
-                  [self.ui.pn_search_edit.text(), 'pn'],
-                  [self.ui.desc_search_edit.text(), 'desc'],
-                  [self.ui.loc_search_edit.text(), 'location'],
-                  [self.ui.remarks_search_edit.text(), 'remarks']]
+        fields = ['nsn', 'pn', 'desc', 'remarks', 'location', 'niin']
         rows = set()
         for i in fields:
             if i[0] != '':
                 select = cur.execute(
-                    'select nsn, pn, niin, location, desc, remarks from benchstock where acft="{}" and {} like "%{}%"'.format(self.acft, i[1], i[0])).fetchall()
+                    'select nsn, pn, niin, location, desc, remarks from benchstock where acft="{}" and {} like "%{}%"'.format(self.acft, i, self.ui.search_edit.text())).fetchall()
                 if len(select) != 0:
                     rows.update(select)
         self.ui.tableWidget.setRowCount(len(rows))
