@@ -17,6 +17,14 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
         self.apache_action()
         self.acft = 'apache'
 
+        self.model = Qt.QStringListModel()
+        self.word_list = set()
+        self.auto_completer()
+        self.completer = Qt.QCompleter()
+        self.completer.setCaseSensitivity(False)
+        self.completer.setModel(self.model)
+        self.ui.search_edit.setCompleter(self.completer)
+
         self.ui.search_edit.returnPressed.connect(self.search)
         self.ui.actionLUH.triggered.connect(self.luh_action)
         self.ui.actionApache.triggered.connect(self.apache_action)
@@ -28,6 +36,15 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
         self.ui.tableWidget.setEditTriggers(Qt.QAbstractItemView.NoEditTriggers)
         self.header = self.ui.tableWidget.horizontalHeader()
         self.header.setStretchLastSection(True)
+
+    def auto_completer(self):
+        cur.execute('select nsn, pn, desc, remarks, location, niin, barcode from benchstock where acft="{}"'.format(self.acft))
+        for i in cur.fetchall():
+            for j in i:
+                self.word_list.add(j)
+
+        self.model.setStringList(list(self.word_list))
+
 
 
     def reset_table(self):
