@@ -88,18 +88,36 @@ class Ball(pygame.sprite.Sprite):
         self.x_speed = speed
         self.y_speed = speed
         self.display = display
+        self.moving = False
+        self.x_angle = 1
+        self.y_angle = -10
 
     def draw(self):
         self.move()
         self.display.blit(self.image, (self.rect.x, self.rect.y))
 
     def move(self):
-        if self.rect.y < 0 or self.rect.y + 11 > display_height:
+        if self.rect.y < 0 :
             self.y_speed = -self.y_speed
         if self.rect.x < 0 or self.rect.x + 11 > display_width:
             self.x_speed = -self.x_speed
+        if self.rect.y + 20 > display_height and self.moving:
+            self.x_speed = 0
+            self.y_speed = 0
+            self.moving = False
         self.rect.y += self.y_speed
         self.rect.x += self.x_speed
+
+    def change_angle(self,button):
+        buttons = {
+            'left': -1,
+            'right': 1
+        }
+        # if self.y_angle <= -1:
+        #     self.y_angle += buttons[button]
+        self.x_angle += buttons[button]
+        print(self.y_angle)
+        print(self.x_angle)
 
 def block_placer():
     global blocks
@@ -109,7 +127,7 @@ def block_placer():
             if i != 0 and i != tiles_v - 1:
                 rect = pygame.Rect(tile_size*j+gap, tile_size*i+gap,block_size,block_size)
                 h = random.choice([0,1,3,5])
-                block = Block(rect, white, hits=h)
+                block = Block(rect, green, hits=h)
                 l.append(block)
         blocks.append(l)
 def draw_blocks(b):
@@ -151,9 +169,15 @@ def game_loop():
                 quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    ball.x_speed = -10
-                    ball.y_speed = -2
+                    ball.x_speed = ball.x_angle
+                    ball.y_speed = ball.y_angle
+                    ball.rect.x += ball.x_speed
+                    ball.rect.y += ball.y_speed
+
+                    ball.moving = True
                     print('space')
+                if event.key == pygame.K_LEFT and  ball.moving == False:
+                    ball.change_angle('left')
 
         gameDisplay.fill(black)
         draw_blocks(ball)
