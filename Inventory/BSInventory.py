@@ -120,6 +120,7 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
             conn.commit()
             if self.acft == 'apache':
                 self.apache_action()
+                self.search()
             else:
                 self.luh_action()
 
