@@ -65,4 +65,4 @@ udacity/data anlitics/lesson1/project_submissions.csv
 CharlesResume.txt
 Game/agario.py
 Game/astroids.py
-Inventory/barcodes/
+Inventory/barcodes/*

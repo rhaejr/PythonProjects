@@ -164,7 +164,7 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
 
     def search(self):
         self.ui.tableWidget.clear()
-        fields = ['nsn', 'pn', 'desc', 'remarks', 'location', 'niin']
+        fields = ['nsn', 'pn', 'desc', 'remarks', 'location', 'niin', 'barcode']
         rows = set()
         for i in fields:
             if i[0] != '':
@@ -184,7 +184,8 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
 
         self.ui.tableWidget.setHorizontalHeaderLabels(
             ['nsn', 'pn', 'niin', 'location', 'description', 'remarks'])
-
+        self.ui.label_7.setText('Search: {}'.format(self.ui.search_edit.text()))
+        self.ui.search_edit.setText('')
 
 
 def main():

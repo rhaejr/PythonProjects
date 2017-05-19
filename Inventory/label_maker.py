@@ -15,7 +15,7 @@ font_path = 'fonts'
 big_lablels = (101, 34, 2, 7)
 address_labels = (68.675, 26.4, 3, 10)
 label_width , label_height, columns, rows = address_labels
-registerFont(TTFont('3of9', os.path.join(font_path, 'free3of9.ttf')))
+# registerFont(TTFont('3of9', os.path.join(font_path, 'free3of9.ttf')))
 # Create an A4 portrait (210mm x 297mm) sheets with 2 columns and 8 rows of
 # labels. Each label is 90mm x 25mm with a 2mm rounded corner. The margins are
 # automatically calculated.
