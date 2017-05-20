@@ -57,6 +57,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
         self.tabWidget.setSizePolicy(sizePolicy)
+        self.tabWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
         self.tab_2 = QtGui.QWidget()
         self.tab_2.setObjectName(_fromUtf8("tab_2"))

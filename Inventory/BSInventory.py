@@ -109,6 +109,9 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
                   [self.ui.remarks_edit.text().upper(), 'remarks'],
                   [self.ui.loc_edit.text().upper().upper(), 'location'],
                   [self.ui.niin_edit.text().upper(), 'niin']]
+        # ac = {'luh': '720', 'apache': '640'}
+        # code = '{}{}'.format(ac[self.acft], fields[0][-9:])
+        # barcode = '{}{}'.format(str(code), str(calculate_checksum(code)))
         matches = False
         for f in fields:
 
@@ -118,9 +121,9 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
                     matches = True
         if matches == False:
 
-            cur.execute('insert into benchstock values(?,?,?,?,?,?,?)', (fields[0][0], fields[1][0], fields[2][0],
+            cur.execute('insert into benchstock values(?,?,?,?,?,?,?,?,?)', (fields[0][0], fields[1][0], fields[2][0],
                                                                                  fields[3][0], fields[4][0], fields[5][0],
-                                                                                 self.acft))
+                                                                                 self.acft,'', 'false'))
             conn.commit()
             if self.acft == 'apache':
                 self.apache_action()
