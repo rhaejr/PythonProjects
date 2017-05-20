@@ -222,6 +222,50 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Labels</string>
+       </attribute>
+       <widget class="QPushButton" name="add_label_btn">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Add Label</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="print_label_btn">
+        <property name="geometry">
+         <rect>
+          <x>120</x>
+          <y>10</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Print Labels</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="reset_labels_btn">
+        <property name="geometry">
+         <rect>
+          <x>230</x>
+          <y>10</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Reset Labels</string>
+        </property>
+       </widget>
+      </widget>
      </widget>
     </item>
     <item>

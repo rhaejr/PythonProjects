@@ -1,5 +1,5 @@
 import sys, sqlite3
-from mytools import calculate_checksum
+from mytools import calculate_checksum, label_maker
 from PyQt4 import Qt
 from gui import Ui_MainWindow
 
@@ -33,6 +33,10 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
         self.ui.reset_table_button.clicked.connect(self.reset_table)
         self.ui.update_button.clicked.connect(self.update_db)
         self.ui.tableWidget.doubleClicked.connect(self.load_from_table)
+        self.ui.print_label_btn.clicked.connect(self.print_labels)
+        self.ui.add_label_btn.clicked.connect(self.add_label)
+        self.ui.reset_labels_btn.clicked.connect(self.reset_labels)
+
         self.ui.tableWidget.setEditTriggers(Qt.QAbstractItemView.NoEditTriggers)
         self.header = self.ui.tableWidget.horizontalHeader()
         self.header.setStretchLastSection(True)
@@ -159,8 +163,18 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
         else:
             self.luh_action()
 
+    def print_labels(self):
+        label_maker(self.acft)
 
+    def add_label(self):
+        rowID = self.ui.tableWidget.currentRow()
+        nsn = self.ui.tableWidget.item(rowID, 0).text()
+        cur.execute('update benchstock set label="true" where nsn="{}"'.format(nsn))
+        conn.commit()
 
+    def reset_labels(self):
+        cur.execute('update benchstock set label="false" where acft="{}"'.format(self.acft))
+        conn.commit()
 
     def search(self):
         self.ui.tableWidget.clear()
