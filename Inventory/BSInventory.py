@@ -112,12 +112,14 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
         # ac = {'luh': '720', 'apache': '640'}
         # code = '{}{}'.format(ac[self.acft], fields[0][-9:])
         # barcode = '{}{}'.format(str(code), str(calculate_checksum(code)))
+        check = [fields[0], fields[1], fields[5]]
         matches = False
-        for f in fields:
-
-            if f[0] != '' and (f[1] != 'desc' or f[1] != 'remarks'):
+        for f in check:
+            if f[0] != '':
+                # not checking for location for now
                 cur.execute('select * from benchstock where {} = "{}"'.format(f[1], f[0]))
                 if len(cur.fetchall()) > 0:
+                    print(f[1])
                     matches = True
         if matches == False:
 
