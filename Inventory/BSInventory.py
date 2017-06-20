@@ -125,7 +125,7 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
 
             cur.execute('insert into benchstock values(?,?,?,?,?,?,?,?,?)', (fields[0][0], fields[1][0], fields[2][0],
                                                                                  fields[3][0], fields[4][0], fields[5][0],
-                                                                                 self.acft,'', 'false'))
+                                                                                  self.acft,'', 'false'))
             conn.commit()
             if self.acft == 'apache':
                 self.apache_action()
