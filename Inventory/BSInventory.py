@@ -1,7 +1,8 @@
-import sys, sqlite3
+import sys, sqlite3, os
 from mytools import calculate_checksum, label_maker
 from PyQt4 import Qt
 from gui import Ui_MainWindow
+from ipc import Ui_Dialog
 
 conn = sqlite3.connect('inventory.db')
 cur = conn.cursor()
@@ -36,6 +37,7 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
         self.ui.print_label_btn.clicked.connect(self.print_labels)
         self.ui.add_label_btn.clicked.connect(self.add_label)
         self.ui.reset_labels_btn.clicked.connect(self.reset_labels)
+        self.ui.ipc_button.clicked.connect(self.open_ipc)
 
         self.ui.tableWidget.setEditTriggers(Qt.QAbstractItemView.NoEditTriggers)
         self.header = self.ui.tableWidget.horizontalHeader()
@@ -205,6 +207,22 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
             ['nsn', 'pn', 'niin', 'location', 'description', 'remarks'])
         self.ui.label_7.setText('Search: {}'.format(self.ui.search_edit.text()))
         self.ui.search_edit.setText('')
+
+    def open_ipc(self):
+        ipc = IPC()
+        res = ipc.exec()
+        if res:
+            print('test')
+
+
+
+class IPC(Qt.QDialog):
+    def __init__(self, parent=None):
+        Qt.QDialog.__init__(self, parent)
+        self.ui = Ui_Dialog()
+        self.ui.setupUi(self)
+        self.setGeometry(50,50,1750,800)
+        self.ui.label.setPixmap(Qt.QPixmap('C:\\Users\\michael\\Documents\\GitHub\\PythonProjects\\Inventory\\apache tm\\blade-1.jpg'))
 
 
 def main():

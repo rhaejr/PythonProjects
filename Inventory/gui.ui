@@ -108,6 +108,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="ipc_button">
+            <property name="text">
+             <string>IPC</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
