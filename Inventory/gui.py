@@ -74,9 +74,7 @@ class Ui_MainWindow(object):
         self.search_edit.setObjectName(_fromUtf8("search_edit"))
         self.verticalLayout_7.addWidget(self.search_edit)
         self.horizontalLayout.addLayout(self.verticalLayout_7)
-        self.search_button = QtGui.QPushButton(self.tab_2)
-        self.search_button.setObjectName(_fromUtf8("search_button"))
-        self.horizontalLayout.addWidget(self.search_button)
+        r
         self.ipc_button = QtGui.QPushButton(self.tab_2)
         self.ipc_button.setObjectName(_fromUtf8("ipc_button"))
         self.horizontalLayout.addWidget(self.ipc_button)
