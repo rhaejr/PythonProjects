@@ -223,23 +223,25 @@ class IPC(Qt.QDialog):
         self.ui.setupUi(self)
         self.setGeometry(50,50,1750,800)
         self.ui.label.setPixmap(Qt.QPixmap('apache tm/blade-1.jpg'))
-
-        self.pages = os.listdir('apache tm')
         self.pages_dic = {}
-        self.make_page_dic()
+        self.pages = self.make_page_dic(os.listdir('apache tm'))
         print(self.pages_dic)
 
         self.ui.pages_combo.addItems(self.pages)
         self.ui.pages_combo.activated[str].connect(self.change_page)
 
 
-    def make_page_dic(self):
-        for p in self.pages:
+    def make_page_dic(self, pages):
+        temp_list = []
+        for p in pages:
             fig = p[-10:-7]
             items = p[-6:-4]
             ext = p[-4:]
 
             self.pages_dic[p[:-4]] = (fig, items,ext)
+            temp_list.append(p[:-4])
+
+        return temp_list
 
 
 
