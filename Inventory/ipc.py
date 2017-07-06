@@ -47,9 +47,9 @@ class Ui_Dialog(object):
         self.pages_combo = QtGui.QComboBox(Dialog)
         self.pages_combo.setObjectName(_fromUtf8("pages_combo"))
         self.verticalLayout.addWidget(self.pages_combo)
-        self.button_grid = QtGui.QGridLayout()
-        self.button_grid.setObjectName(_fromUtf8("button_grid"))
-        self.verticalLayout.addLayout(self.button_grid)
+        self.item_buttons = QtGui.QVBoxLayout()
+        self.item_buttons.setObjectName(_fromUtf8("item_buttons"))
+        self.verticalLayout.addLayout(self.item_buttons)
         self.horizontalLayout.addLayout(self.verticalLayout)
 
         self.retranslateUi(Dialog)

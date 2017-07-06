@@ -3,6 +3,7 @@ from mytools import calculate_checksum, label_maker
 from PyQt4 import Qt
 from gui import Ui_MainWindow
 from ipc import Ui_Dialog
+from functools import partial
 
 conn = sqlite3.connect('inventory.db')
 cur = conn.cursor()
@@ -222,7 +223,7 @@ class IPC(Qt.QDialog):
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
         self.setGeometry(50,50,1750,800)
-        self.ui.label.setPixmap(Qt.QPixmap('apache tm/blade-1.jpg'))
+        self.ui.label.setPixmap(Qt.QPixmap())
         self.pages_dic = {}
         self.pages = self.make_page_dic(os.listdir('apache tm'))
         print(self.pages_dic)
@@ -247,10 +248,41 @@ class IPC(Qt.QDialog):
 
     def change_page(self,page):
 
+        fig, item, ext = self.pages_dic[page]
+        for i in reversed(range(self.ui.item_buttons.count())):
+            try:
+                self.ui.item_buttons.itemAt(i).widget().setParent(None)
+            except AttributeError:
+                pass
+        buttons = []
         self.ui.label.setPixmap(Qt.QPixmap('apache tm/{}'.format(page)))
-        # self.search_button = QtGui.QPushButton(self.tab_2)
-        # self.search_button.setObjectName(_fromUtf8("search_button"))
-        # self.horizontalLayout.addWidget(self.search_button)
+
+        for j in range(int(item)):
+            buttons.append((Qt.QPushButton(str(j + 1)),j+1))
+
+        for b in buttons:
+            self.ui.item_buttons.addWidget(b[0])
+            b[0].clicked.connect(partial(self.get_item_info, fig, b[1]))
+
+            # self.search_button = QtGui.QPushButton(self.tab_2)
+            # self.search_button.setObjectName(_fromUtf8("search_button"))
+            # self.horizontalLayout.addWidget(self.search_button)
+        # self.ui.item_buttons.setAlignment(Qt.AlignTop)
+
+    def get_item_info(self, fig,i):
+        fig_item = str(fig) + str(i)
+        print(fig_item)
+        search = cur.execute('select * from items where figitem = "{}"'.format(fig_item)).fetchall()
+        if len(search) == 0:
+            text, ok = Qt.QInputDialog.getText(self, 'Input Dialog',
+                                                  'No Maches Found.\nAdd NSN?\n(full without dashes)')
+            if ok:
+                cur.execute('insert into items values("{}","{}")'.format(fig_item, text))
+                conn.commit()
+        else:
+            print(search)
+
+
 
 
 def main():

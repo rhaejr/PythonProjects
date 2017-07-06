@@ -46,7 +46,7 @@
       <widget class="QComboBox" name="pages_combo"/>
      </item>
      <item>
-      <layout class="QGridLayout" name="button_grid"/>
+      <layout class="QVBoxLayout" name="item_buttons"/>
      </item>
     </layout>
    </item>
