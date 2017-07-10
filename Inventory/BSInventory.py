@@ -259,10 +259,16 @@ class IPC(Qt.QDialog):
 
         for j in range(int(item)):
             buttons.append((Qt.QPushButton(str(j + 1)),j+1))
-
-        for b in buttons:
-            self.ui.item_buttons.addWidget(b[0])
-            b[0].clicked.connect(partial(self.get_item_info, fig, b[1]))
+        n = 2
+        buttons_2d =[buttons[i:i + n] for i in range(0, len(buttons), n)]
+        for x in range(len(buttons_2d)):
+            for y in range(len(buttons_2d[x])):
+                print(buttons_2d[x][y])
+                self.ui.item_buttons.addWidget(buttons_2d[x][y][0],x,y)
+                buttons_2d[x][y][0].clicked.connect(partial(self.get_item_info, fig, buttons_2d[x][y][1]))
+        # for b in buttons:
+        #     self.ui.item_buttons.addWidget(b[0])
+        #     b[0].clicked.connect(partial(self.get_item_info, fig, b[1]))
 
             # self.search_button = QtGui.QPushButton(self.tab_2)
             # self.search_button.setObjectName(_fromUtf8("search_button"))
