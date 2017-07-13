@@ -277,7 +277,6 @@ class IPC(Qt.QDialog):
 
     def get_item_info(self, fig,i):
         fig_item = str(fig) + str(i)
-        print(fig_item)
         search = cur.execute('select * from items where figitem = "{}"'.format(fig_item)).fetchall()
         if len(search) == 0:
             text, ok = Qt.QInputDialog.getText(self, 'Input Dialog',
@@ -286,7 +285,11 @@ class IPC(Qt.QDialog):
                 cur.execute('insert into items values("{}","{}")'.format(fig_item, text))
                 conn.commit()
         else:
-            print(search)
+            item = cur.execute('select desc, location from benchstock where nsn="{}"'.format(search[0][1])).fetchall()
+            output = Qt.QMessageBox()
+            output.setText('NAME: {}\nNSN: {}\nLOCATION:  {}'.format(item[0][0],search[0][1],item[0][1]))
+            output.setWindowTitle(fig_item)
+            output.exec_()
 
 
 
