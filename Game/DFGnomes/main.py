@@ -31,9 +31,17 @@ def game_loop():
     while True:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT] != 0 or keys[pygame.K_d]:
+            move(1,0,0)
         elif keys[pygame.K_LEFT] != 0 or keys[pygame.K_a]:
+            move(-1,0,0)
         elif keys[pygame.K_UP] != 0 or keys[pygame.K_w]:
+            move(0,0,1)
         elif keys[pygame.K_DOWN] != 0 or keys[pygame.K_s]:
+            move(0,0,-1)
+        elif keys[pygame.KMOD_SHIFT] != 0:
+            move(0,1,0)
+        elif keys[pygame.KMOD_CTRL] != 0:
+            move(0,-1,0)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -44,8 +52,10 @@ def game_loop():
 
 def move(x,y,z):
     x_pos,y_pos, z_pos = init_pos
-
-    print(game_map.map_tiles[x_pos + x][y_pos + y][z_pos + z])
+    x_pos += x
+    y_pos += y
+    z_pos += z
+    print(game_map.map_tiles[x_pos][y_pos][z_pos])
 
 game_loop()
 

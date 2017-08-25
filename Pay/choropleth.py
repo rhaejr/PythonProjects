@@ -4,6 +4,11 @@ from geoplotlib.colors import ColorMap
 import json, math
 import sqlite3, csv
 
+
+# notes
+# http://www.businessinsider.com/us-cities-with-the-lowest-cost-of-living-2016-7
+# 2016 wg10 fort wayne, indiana - 29.59 lowest cost of living according to business insider
+
 scale = 18
 start = 18
 conn = sqlite3.connect('wages.db')
