@@ -56,6 +56,7 @@ Pay/testwages.db-journal
 Pay/test,ws.csv
 Pay/test_wg.csv
 Pay/test_wl.csv
+Pay/wages.db
 *.m4a
 Pay/test_ws.csv
 udacity/data anlitics/lesson1/daily_engagement.csv
@@ -68,3 +69,4 @@ Game/astroids.py
 Inventory/barcodes/*
 *.mpg
 *.mpeg
+Pay/wages.db
