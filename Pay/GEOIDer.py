@@ -3,7 +3,7 @@ import csv, sqlite3
 conn = sqlite3.connect('wages.db')
 cur = conn.cursor()
 
-cur.execute('select state, county from counties')
+cur.execute('select state, county from counties where GEOID=NULL')
 counties = cur.fetchall()
 
 with open('GEOIDs.txt', 'r') as f:
