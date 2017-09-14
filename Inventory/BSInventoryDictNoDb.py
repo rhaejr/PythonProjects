@@ -294,6 +294,11 @@ class IPC(Qt.QDialog):
             output.setWindowTitle(fig_item)
             output.exec_()
 
+def select_from_dict(db, items=(), conditions=()):
+    # select item(s) from db with conditions or whole db
+
+    return
+
 
 
 
