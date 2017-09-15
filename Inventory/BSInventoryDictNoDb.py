@@ -296,8 +296,19 @@ class IPC(Qt.QDialog):
 
 def select_from_dict(db, items=(), conditions=()):
     # select item(s) from db with conditions or whole db
+    if len(items) == 0:
+        print('all')
+        items = tuple(db[tuple(db.keys())[0]].keys())
+        return select_from_dict(db, items, conditions)
+    else:
+        results = []
+        for key in db:
+            temp = []
+            for item in items:
+                temp.append(db[key][item])
+            results.append(temp)
+        return results
 
-    return
 
 
 
