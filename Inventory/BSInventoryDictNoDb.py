@@ -5,8 +5,8 @@ from gui import Ui_MainWindow
 from ipc import Ui_Dialog
 from functools import partial
 
-conn = sqlite3.connect('inventory.db')
-cur = conn.cursor()
+# conn = sqlite3.connect('inventory.db')
+# cur = conn.cursor()
 
 # nsn, pn, desc, remarks, location, niin, acft
 
@@ -88,7 +88,8 @@ class Main(Qt.QMainWindow, Ui_MainWindow):
         self.ui.main_label.setText('Apache')
         self.acft = 'apache'
         self.ui.tableWidget.clear()
-        rows = cur.execute('select nsn, pn, niin, location, desc, remarks from benchstock where acft="apache"').fetchall()
+        # rows = cur.execute('select nsn, pn, niin, location, desc, remarks from benchstock where acft="apache"').fetchall()
+        rows = select_from_dict(self.db,('nsn','pn', 'location', 'desc', 'remarks'),('acft', 'apache'))
         self.ui.tableWidget.setRowCount(len(rows))
         self.ui.tableWidget.setColumnCount(6)
         row_num = 0

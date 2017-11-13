@@ -1,6 +1,5 @@
 from pytube import YouTube
-import subprocess
-yt = YouTube('https://www.youtube.com/watch?v=3ku8CQaEIKo&t=69s')
+yt = YouTube('https://www.youtube.com/watch?v=HZTgmC0Pmb8')
 print(yt.get_videos())
 
 video = yt.get('mp4', '{}p'.format(input('resolution: ')))

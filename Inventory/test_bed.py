@@ -21,8 +21,13 @@ def select_from_dict(db, items=(), conditions=()):
         for key in db:
             temp = []
             for item in items:
-                temp.append(db[key][item])
+                meets_conditions = True
+                for condition in conditions:
+                    if db[item][condition[0]] != condition[1]:
+                        meets_conditions = False
+                if meets_conditions:
+                    temp.append(db[key][item])
             results.append(temp)
         return results
 
-print(select_from_dict(db,'pn'))
+print(select_from_dict(db,'pn', (('acft', 'apache'), ('pn', '7-511527009-101'))))
